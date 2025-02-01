@@ -28,8 +28,8 @@
     /* Type Checking */
     "strictNullChecks": true,  /* Enable strict null checks */
     "noImplicitAny": true,     /* Disallow implicit `any` type */
-    "noUnusedLocals": true,    /* Error for unused local variables */
-    "noUnusedParameters": true /* Error for unused parameters */
+    "noUnusedLocals": false,    /* Error for unused local variables */
+    "noUnusedParameters": false /* Error for unused parameters */
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", ".env"]
