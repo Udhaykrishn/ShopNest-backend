@@ -22,7 +22,8 @@
     "inversify": "^6.2.1",
     "inversify-express-utils": "^6.4.10",
     "mongoose": "^8.9.5",
-    "reflect-metadata": "^0.2.2"
+    "reflect-metadata": "^0.2.2",
+    "tsconfig-paths": "^4.2.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
