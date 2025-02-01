@@ -1,12 +1,12 @@
 import { injectable } from 'inversify';
 import mongoose from 'mongoose';
-import { config } from './env.config';
+import { env } from './env.config';
 
 @injectable()
 export class DatabaseService {
     async connect(): Promise<void> {
         try {
-            await mongoose.connect(config.DATABASE_URL);
+            await mongoose.connect(env.DATABASE_URL);
             console.log('Connected to MongoDB');
         } catch (error) {
             console.error('Database connection error:', error);

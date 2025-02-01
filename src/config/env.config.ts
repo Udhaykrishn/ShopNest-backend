@@ -11,7 +11,7 @@ const getEnvVariable = (name: string): string => {
     return value;
 };
 
-export const config: IEnvConfig = {
+export const env: IEnvConfig = {
     DATABASE_URL: getEnvVariable('DATABASE_URL'),
     PORT: getEnvVariable('PORT')
 };
