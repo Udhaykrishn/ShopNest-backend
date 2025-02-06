@@ -1,4 +1,4 @@
-import { IAddress } from "@/models/users/interface/address.interface";
+import { IAddress } from "./interface";
 import mongoose, { Schema } from "mongoose";
 
 const addressSchema = new Schema<IAddress>({
@@ -17,14 +17,10 @@ const addressSchema = new Schema<IAddress>({
         trim: true,
         required: true
     },
-    updateAt: {
-        type: Date
-    },
-    createdAt: {
-        type: Date
-    },
     district: {
         type: String,
         required: true,
     },
-})
+}, { timestamps: true })
+
+export const Address = mongoose.model<IAddress>("Address", addressSchema) 
