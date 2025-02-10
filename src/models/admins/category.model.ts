@@ -16,6 +16,10 @@ const categorySchema = new Schema<ICategory>({
         type: String,
         minlength: 5,
         trim: true
+    },
+    isBlocked: {
+        type: Boolean,
+        default: false,
     }
 }, { timestamps: true })
 
