@@ -50,7 +50,13 @@ const UserSchema = new Schema<IUser>({
     cart: {
         type: Schema.Types.ObjectId,
         ref: 'Cart'
-    }
+    },
+    role: {
+        type: String,
+        default: "user",
+    },
+    otp: { type: String, required: false },
+    otpExpires: { type: Date, required: false, expires: 300 }
 }, { timestamps: true })
 
 UserSchema.index({ email: 1 }, { unique: true }),
