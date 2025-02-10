@@ -14,4 +14,7 @@ export interface IUser extends Document {
     cart: Types.ObjectId;
     createdAt: Date;
     updatedAt: Date;
+    role:"user",
+    otp?:string;
+    otpExpires?:Date;
 }
