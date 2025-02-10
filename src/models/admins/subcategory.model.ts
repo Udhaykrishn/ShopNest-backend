@@ -7,12 +7,13 @@ const subCategorySchema = new Schema<ISubCategory>({
         required: true,
         trim: true,
         minlength: 3,
+        unique: true,
     },
     cateogryId: {
         type: Types.ObjectId,
         ref: "Category",
     },
-    isActive: {
+    isBlock: {
         type: Boolean,
         default: true,
     }
