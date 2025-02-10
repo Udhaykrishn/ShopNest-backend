@@ -61,6 +61,10 @@ const vendorSchema = new Schema<IVendor>({
     phone: {
         type: String,
         required: true
+    },
+    role: {
+        type: String,
+        default: "vendor",
     }
 })
 
