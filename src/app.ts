@@ -6,9 +6,7 @@ import { config } from "dotenv"
 config()
 import cors from "cors"
 
-
 const server = new InversifyExpressServer(container)
-
 
 server.setConfig((app) => {
     app.use(cors());
