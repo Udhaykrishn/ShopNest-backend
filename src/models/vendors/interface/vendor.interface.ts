@@ -7,12 +7,13 @@ export interface IVendor extends Document {
     order: Types.ObjectId[];
     wallet: Types.ObjectId[];
     products: Types.ObjectId[];
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
     approvalStatus: "active" | "inactive",
     isApproved: boolean;
     isBlocked: boolean;
     avatar?: string | null;
     password: string;
     address: Types.ObjectId[];
+    role: "vendor",
 }
