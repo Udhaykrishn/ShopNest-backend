@@ -29,8 +29,12 @@ const adminSchema = new Schema<IAdmin>({
     },
     updatedAt: {
         type: Date,
+    },
+    role: {
+        type: String,
+        default: "admin",
     }
 },
     { timestamps: true })
 
-    export const Admin =  mongoose.model<IAdmin>("Admin",adminSchema)
+export const Admin = mongoose.model<IAdmin>("Admin", adminSchema)
