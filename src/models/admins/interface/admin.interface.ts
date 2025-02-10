@@ -7,5 +7,6 @@ export interface IAdmin extends Document {
     categorys: Types.ObjectId[]
     coupons: Types.ObjectId[]
     createdAt:Date;
-    updatedAt:Date
+    updatedAt:Date,
+    role:"admin"
 }
