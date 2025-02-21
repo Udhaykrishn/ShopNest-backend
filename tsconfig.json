@@ -5,32 +5,44 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
+    // "typeRoots": [
+    //   "./node_modules/@types",
+    //   "./src/types"
+    // ],
+    // "types": [
+    //   "node",
+    //   "express"
+    // ],
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-
     /* Paths and Directories */
-    "baseUrl": "./src",        /* Base directory for module resolution */
-    "rootDir": "./src",        /* Root directory of TypeScript source files */
-    "outDir": "./dist",        /* Output directory for compiled files */
-
+    "baseUrl": "./src", /* Base directory for module resolution */
+    "rootDir": "./src", /* Root directory of TypeScript source files */
+    "outDir": "./dist", /* Output directory for compiled files */
     /* Module Resolution */
     "paths": {
-      "@/*": ["*"]             /* Alias @ to src folder */
+      "@/*": [
+        "*"
+      ] /* Alias @ to src folder */
     },
-
     /* Emit Settings */
-    "declaration": true,       /* Generate .d.ts files for TypeScript definitions */
-    "sourceMap": true,         /* Generate source maps for debugging */
-    "removeComments": true,    /* Remove comments from compiled files */
-    "noEmitOnError": true,     /* Prevent emitting files if there are errors */
-
+    "declaration": true, /* Generate .d.ts files for TypeScript definitions */
+    "sourceMap": true, /* Generate source maps for debugging */
+    "removeComments": true, /* Remove comments from compiled files */
+    "noEmitOnError": true, /* Prevent emitting files if there are errors */
     /* Type Checking */
-    "strictNullChecks": true,  /* Enable strict null checks */
-    "noImplicitAny": true,     /* Disallow implicit `any` type */
-    "noUnusedLocals": false,    /* Error for unused local variables */
+    "strictNullChecks": true, /* Enable strict null checks */
+    "noImplicitAny": true, /* Disallow implicit `any` type */
+    "noUnusedLocals": false, /* Error for unused local variables */
     "noUnusedParameters": false /* Error for unused parameters */
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", ".env"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    ".env"
+  ]
 }
