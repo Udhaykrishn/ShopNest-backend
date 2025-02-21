@@ -8,10 +8,7 @@ const categorySchema = new Schema<ICategory>({
         required: true,
         trim: true,
     },
-    subCategory: [{
-        type: Schema.Types.ObjectId,
-        ref: "SubCategory"
-    }],
+    subCategory: [],
     description: {
         type: String,
         minlength: 5,
