@@ -1,5 +1,6 @@
-import mongoose, { Schema, Types } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { IVendor } from "@/models/vendors/interface/vendor.interface";
+import { passwordToBeHash } from "@/utils";
 
 
 const vendorSchema = new Schema<IVendor>({
@@ -25,6 +26,10 @@ const vendorSchema = new Schema<IVendor>({
         minlength: 8
     },
     isApproved: {
+        type: Boolean,
+        default: false,
+    },
+    isRejected: {
         type: Boolean,
         default: false,
     },
@@ -68,14 +73,12 @@ const vendorSchema = new Schema<IVendor>({
     }
 })
 
-vendorSchema.index({ email: 1 }, { unique: true });
-
 vendorSchema.pre("save", async function (next) {
     const vendor = this as IVendor;
 
     if (!vendor.isModified("password")) return next();
     try {
-        this.password = this.password // replace with password hashing method
+        this.password = await passwordToBeHash(this.password)
         next();
     } catch (error: any) {
         return next(error);
