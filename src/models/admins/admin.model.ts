@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import { IAdmin } from './interface/admin.interface';
+import { passwordToBeHash } from '@/utils';
 
 
 const adminSchema = new Schema<IAdmin>({
@@ -15,15 +16,6 @@ const adminSchema = new Schema<IAdmin>({
         required: true,
         trime: true
     },
-    categorys: [
-        { type: Schema.Types.ObjectId, ref: "Categorys" }
-    ],
-    coupons: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: "Coupons"
-        }
-    ],
     createdAt: {
         type: Date,
     },
@@ -36,5 +28,13 @@ const adminSchema = new Schema<IAdmin>({
     }
 },
     { timestamps: true })
+
+
+adminSchema.pre("save", async function (next) {
+    if (this.isModified("password")) {
+        this.password = await passwordToBeHash(this.password)
+        next();
+    }
+})
 
 export const Admin = mongoose.model<IAdmin>("Admin", adminSchema)
