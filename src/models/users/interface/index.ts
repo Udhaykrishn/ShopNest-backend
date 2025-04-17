@@ -1,3 +1,3 @@
-export * from "./address.interface"
-export * from "./user.interface"
-export * from "./otp.interface"
+export { IAddress } from "./address.interface"
+export { IUser } from "./user.interface"
+export { IOtpData } from "./otp.interface"
