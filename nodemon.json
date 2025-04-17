@@ -1,7 +1,11 @@
 {
-    "watch": [
-        "src"
-    ],
-    "ext": "ts,json",
-    "exec": "ts-node -r tsconfig-paths/register  ./src/index.ts"
+  "watch": [
+    "src"
+  ],
+  "ext": "ts",
+  "ignore": [
+    "node_modules",
+    "dist"
+  ],
+  "exec": "node -r tsconfig-paths/register -r @swc-node/register ./src/index.ts"
 }
