@@ -11,6 +11,7 @@ import {
     successResponse ,
 } from "@/utils";
 import { setAuthHeader } from "@/utils";
+import { HttpStatusCode } from "axios";
 import { Request, Response } from "express";
 import { inject } from "inversify";
 import {
@@ -32,9 +33,9 @@ export class AdminAuthController {
         try {
             const admin = await this.adminAuthService.login(req.body)
             await setAuthHeader(admin.token, req, res, Role.ADMIN)
-            return res.status(200).json(successResponse(admin))
+            return res.status(HttpStatusCode.Ok).json(successResponse(admin))
         } catch (error: any) {
-            return res.status(400).json(errorResponse(error.message))
+            return res.status(HttpStatusCode.InternalServerError).json(errorResponse(error.message))
         }
     }
 
@@ -43,14 +44,14 @@ export class AdminAuthController {
     async profile(@request() req: AuthRequest, @response() res: Response) {
         try {
             if (!req.admin) {
-                return res.status(401).json({ message: "Unauthorized: Admin not found" })
+                return res.status(HttpStatusCode.Unauthorized).json({ message: "Unauthorized: Admin not found" })
             }
 
             let isAdmin = await this.adminAuthService.profile(req.admin.id)
 
-            return res.status(200).json(successResponse(isAdmin))
+            return res.status(HttpStatusCode.Ok).json(successResponse(isAdmin))
         } catch (error: any) {
-            return res.status(500).json(errorResponse(error.message))
+            return res.status(HttpStatusCode.InternalServerError).json(errorResponse(error.message))
         }
     }
 
@@ -59,9 +60,9 @@ export class AdminAuthController {
     async logout(@request() req: AuthRequest, @response() res: Response) {
         try {
             clearAuthCookie(res, "admin_auth_token")
-            return res.status(200).json(successResponse("Admin logout successfully"))
+            return res.status(HttpStatusCode.Ok).json(successResponse("Admin logout successfully"))
         } catch (error: any) {
-            return res.status(500).json(errorResponse(error.message))
+            return res.status(HttpStatusCode.InternalServerError).json(errorResponse(error.message))
         }
     }
 }
