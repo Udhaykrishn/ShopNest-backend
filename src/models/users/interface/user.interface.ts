@@ -10,12 +10,12 @@ export interface IUser extends Document {
   avatar?: string;
   isBlocked: boolean;
   orders: string[];
-  wishlist: string[];
+  wishlist: string;
   isVerified: boolean;
   payments: string[];
   addresses: string[];
   wallet: string;
-  cart: string;
+  cartId: string;
   createdAt: Date;
   updatedAt: Date;
   role: "user";
