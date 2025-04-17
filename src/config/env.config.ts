@@ -13,6 +13,7 @@ const getEnvVariable = (name: string): string => {
 
 export const config: IEnvConfig = {
     DATABASE_URL: getEnvVariable('DATABASE_URL'),
+    GEMINI_API: getEnvVariable('GEMINI_API'),
     PORT: getEnvVariable('PORT'),
     ABSTRACT_EMAIL_API_KEY: getEnvVariable('ABSTRACT_EMAIL_API_KEY'),
     ABSTRACT_PHONE_API_KEY: getEnvVariable('ABSTRACT_PHONE_API_KEY'),
@@ -24,5 +25,7 @@ export const config: IEnvConfig = {
     CLOUDINARY_CLOUD_NAME: getEnvVariable("CLOUDINARY_CLOUD_NAME"),
     CLOUDINARY_API_KEY: getEnvVariable("CLOUDINARY_API_KEY"),
     CLOUDINARY_API_SECRET: getEnvVariable("CLOUDINARY_API_SECRET"),
-    GOOGLE_CLIENT_ID: getEnvVariable("GOOGLE_CLIENT_ID")
+    GOOGLE_CLIENT_ID: getEnvVariable("GOOGLE_CLIENT_ID"),
+    CRYTPO_SECRET: getEnvVariable("CRYTPO_SECRET"),
+    SIGN_KEY: getEnvVariable("SIGN_KEY")
 };
