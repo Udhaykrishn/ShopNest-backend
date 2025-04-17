@@ -1,12 +1,25 @@
-import { AuthGuard, AuthRequest, Role } from "@/decorators/AuthGuard";
-import { IAdmin } from "@/models/admins/interface";
-import { IAdminAuthService } from "@/services/interface/auth-admin.interface";
+import { Role } from "@/constants";
+import {
+    AuthGuard,
+    AuthRequest,
+} from "@/decorators/AuthGuard";
+import { IAdminAuthService } from "@/services/interface";
 import { ADMIN } from "@/types";
-import { errorResponse, successResponse } from "@/utils";
+import {
+    clearAuthCookie,
+    errorResponse,
+    successResponse ,
+} from "@/utils";
 import { setAuthHeader } from "@/utils";
 import { Request, Response } from "express";
 import { inject } from "inversify";
-import { controller, httpGet, httpPost, request, response, } from "inversify-express-utils";
+import {
+    controller,
+    httpGet,
+    httpPost,
+    request,
+    response,
+} from "inversify-express-utils";
 
 
 @controller("/auth/admin")
@@ -18,7 +31,7 @@ export class AdminAuthController {
     async login(@request() req: Request, @response() res: Response) {
         try {
             const admin = await this.adminAuthService.login(req.body)
-            await setAuthHeader(admin.token, res)
+            await setAuthHeader(admin.token, req, res, Role.ADMIN)
             return res.status(200).json(successResponse(admin))
         } catch (error: any) {
             return res.status(400).json(errorResponse(error.message))
@@ -30,12 +43,10 @@ export class AdminAuthController {
     async profile(@request() req: AuthRequest, @response() res: Response) {
         try {
             if (!req.admin) {
-                return res.status(401).json({ message: "Unauthorized:User not found" })
+                return res.status(401).json({ message: "Unauthorized: Admin not found" })
             }
 
             let isAdmin = await this.adminAuthService.profile(req.admin.id)
-
-            
 
             return res.status(200).json(successResponse(isAdmin))
         } catch (error: any) {
@@ -47,8 +58,8 @@ export class AdminAuthController {
     @AuthGuard(Role.ADMIN)
     async logout(@request() req: AuthRequest, @response() res: Response) {
         try {
-            const isLogout = await this.adminAuthService.logout(res)
-            return res.status(200).json(successResponse("User logout successfully"))
+            clearAuthCookie(res, "admin_auth_token")
+            return res.status(200).json(successResponse("Admin logout successfully"))
         } catch (error: any) {
             return res.status(500).json(errorResponse(error.message))
         }
