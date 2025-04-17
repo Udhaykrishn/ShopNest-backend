@@ -1,6 +1,7 @@
 import { Document, Types } from "mongoose"
 
 export interface IVendor extends Document {
+    _id:string;
     username: string;
     email: string;
     phone: string;
