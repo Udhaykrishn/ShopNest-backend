@@ -1,5 +1,4 @@
 export interface IEnvConfig {
-    // API_URL: string;
     DATABASE_URL: string;
     JWT_SECRET: string;
     PORT: string;
@@ -13,4 +12,7 @@ export interface IEnvConfig {
     CLOUDINARY_API_KEY: string;
     CLOUDINARY_API_SECRET: string;
     GOOGLE_CLIENT_ID: string;
+    CRYTPO_SECRET: string; 
+    GEMINI_API: string
+    SIGN_KEY: string;
 }
