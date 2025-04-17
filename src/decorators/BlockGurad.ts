@@ -1,31 +1,44 @@
-import { errorResponse } from "@/utils";
-import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
-import { COOKIE_NAME } from "@/constants/cookie";
-import User from "@/models/users/user.model";
-import { Vendor } from "@/models/vendors";
+import {
+    errorResponse,
+    getRoleToken,
+    jwtVerify
+} from "@/utils";
+import {
+    Request,
+    Response,
+    NextFunction
+} from "express";
+import { User } from "@/models/users/implements";
+import { Vendor } from "@/models/vendors/implements";
+import { Role } from "@/constants";
 
-export function BlockGuard() {
+
+export function BlockGuard(roles: Role) {
     return function (target: any, key: string, descriptor: PropertyDescriptor) {
         const originalMethod = descriptor.value;
 
         descriptor.value = async function (req: Request, res: Response, next: NextFunction) {
             try {
-                const token = req.cookies?.[COOKIE_NAME];
+                const { cookie_name, token } = await getRoleToken(roles, req)
+
 
                 if (!token) {
+                    console.log("auth guard: no token working")
                     return res.status(401).json(errorResponse("Unauthorized: No token provided", 401));
                 }
 
-                // Convert JWT verification into a Promise-based function
-                const decoded: any = await new Promise((resolve, reject) => {
-                    jwt.verify(token, process.env.JWT_SECRET as string, (err: any, decoded: any) => {
-                        if (err) reject(err);
-                        else resolve(decoded);
-                    });
-                });
+                let decoded: any;
 
-                // Find the user/vendor in the database
+                try {
+                    decoded = await jwtVerify(token);
+                } catch (err: any) {
+                    if (err.name === "TokenExpiredError") {
+                        res.clearCookie(cookie_name);
+                        return res.status(403).json(errorResponse("Token expired. Please log in again.", 403));
+                    }
+                    return res.status(401).json(errorResponse("Invalid token", 401));
+                }
+
                 let role: any = null;
 
                 if (decoded.role === "user") {
@@ -34,25 +47,23 @@ export function BlockGuard() {
                     role = await Vendor.findById(decoded.id);
                 }
 
-                // If user/vendor not found or blocked
+                let RoleModel = cookie_name
+
                 if (!role) {
-                    res.clearCookie(COOKIE_NAME); // Clear token
+                    res.clearCookie(RoleModel);
                     return res.status(404).json(errorResponse("User not found", 404));
                 }
 
                 if (role.isBlocked) {
-                    res.clearCookie(COOKIE_NAME); // Remove token
+                    res.clearCookie(RoleModel);
                     return res.status(403).json({
                         success: false,
-                        message: "User is blocked. Redirecting to login...",
-                        redirect: "/login"  // Send redirect URL
+                        message: "Your account blocked by admin",
                     });
                 }
 
-                // Proceed to the original method
-                return originalMethod.call(this, req, res, next);
+                return await originalMethod.call(this, req, res, next);
             } catch (error: any) {
-                console.log(error.message)
                 return res.status(500).json(errorResponse("Server error in authentication", 500));
             }
         };
