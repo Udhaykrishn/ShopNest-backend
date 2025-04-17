@@ -1,8 +1,13 @@
-import app from "@/app"
-import { DatabaseService } from "./config"
+import "reflect-metadata";
+import app from "@/app";
+import { DatabaseService } from "@/config"
+const PORT = 3001;
+
 const bootstrap = async () => {
-    await DatabaseService.connection()
-    app.listen(3001, () => console.log(`🚀 Server started on ${3001}`))
-}
+  await DatabaseService.connection();
+  app.listen(PORT, () => {
+    console.log(`🚀 Server started on http://localhost:${PORT}, PID: ${process.pid}`);
+  });
+};
 
 bootstrap()
