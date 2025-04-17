@@ -13,7 +13,9 @@ export const validateRequest = (dtoClass: any) => {
 
             const errors = await validate(dtoInstance, {
                 whitelist: true,
-                forbidNonWhitelisted: true
+                forbidNonWhitelisted: true,
+                validationError: { target: false },
+                skipMissingProperties:false
             });
 
             if (errors.length > 0) {
