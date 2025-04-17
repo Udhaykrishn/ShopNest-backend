@@ -1,3 +1,3 @@
-export  * from "./category.interface"
-export * from "./admin.interface"
-export * from "./subcategory.interface"
+export { ICategory } from "./category.interface"
+export { IAdmin } from "./admin.interface"
+export { ISubCategory } from "./subcategory.interface" 
