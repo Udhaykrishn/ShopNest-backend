@@ -15,7 +15,5 @@ export interface IUser {
     orderId?: string;
     wishlistId?: string;
     paymentId?: string;
-    otp?: string;
-    otpExpiry?: Date;
     role:"user"
 }
