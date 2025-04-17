@@ -1,52 +1,125 @@
-import { id, inject } from "inversify";
-import { controller, httpGet, httpPatch, httpPost, httpPut, request, response } from "inversify-express-utils";
+import { inject } from "inversify";
+import {
+    controller,
+    httpGet,
+    httpPatch,
+    httpPost,
+    httpPut,
+    request,
+    response
+} from "inversify-express-utils";
 import { USER } from "@/types";
 import { Request, Response } from "express";
-import { successResponse, errorResponse } from "@/utils/api-respnose.utils";
-import { IUserService } from "@/services/interface/user.interface";
+import {
+    successResponse,
+    errorResponse
+} from "@/utils";
+import { IUserService } from "@/services/interface/user";
 import { validateRequest } from "@/middleware/validation.middleware";
-import { CreateUserDTO, ForgotPasswordDto, SendOtpDto, VerifyOtpDto } from "@/dtos/users";
-import { Throttle } from "@/decorators/throttle.decorator";
-import { AuthGuard, Role as AuthRole } from "@/decorators/AuthGuard";
-import { OtpType, Role } from "@/constants";
+import {
+    CreateUserDTO,
+    UpdateUserDTO,
+} from "@/dtos/users";
+import { AuthGuard } from "@/decorators/AuthGuard";
 import { BlockGuard } from "@/decorators/BlockGurad";
+import { OtpType, Role, RoleType } from '@/constants';
+import { HttpStatusCode } from "axios";
+import { IOtpService } from "@/services/interface";
 
 @controller("/users")
 export class UserController {
-    constructor(@inject(USER.UserService) private readonly userService: IUserService) { }
+    constructor(
+        @inject(USER.UserService) private readonly userService: IUserService,
+        @inject(USER.OTPService) private readonly otpService: IOtpService
+    ) { }
 
     @httpGet("/")
-    @Throttle(5, 60000)
-
-
     async getUsers(@request() req: Request, @response() res: Response) {
         try {
             const { search, page = 1, limit = 10 } = req.query;
             const result = await this.userService.getAllUsers(search as string, Number(page), Number(limit));
-            return res.json(successResponse(result, "Users retrieved successfully"));
+            return res.status(HttpStatusCode.Ok).json(successResponse(result, "Users retrieved successfully"));
         } catch (error: any) {
             return res.status(500).json(errorResponse(error.message));
         }
     }
 
     @httpGet("/:id")
-    @AuthGuard(AuthRole.USER)
-    @BlockGuard()
+    @AuthGuard(Role.USER)
+    @BlockGuard(Role.USER)
     async getUserById(@request() req: Request, @response() res: Response) {
         try {
             const { id } = req.params;
             const user = await this.userService.getUserById(id);
-            if (!user) return res.status(404).json(errorResponse("User not found"));
-            return res.json(successResponse(user, "User retrieved successfully"));
+            if (!user) return res.status(HttpStatusCode.NotFound).json(errorResponse("User not found"));
+            return res.status(HttpStatusCode.Ok).json(successResponse(user, "User retrieved successfully"));
         } catch (error: any) {
             return res.status(500).json(errorResponse(error.message));
         }
     }
 
-    @httpPost("/", validateRequest(CreateUserDTO))
+    @httpPost("/email/change")
+    @AuthGuard(Role.USER)
+    @BlockGuard(Role.USER)
+    async changeEmail(@request() req: Request, @response() res: Response) {
+        try {
+            const updateUserWithEmail = await this.userService.updateUser(req.user?.id as string, { email: req.body.email });
+            return res.status(HttpStatusCode.Ok).json(successResponse(updateUserWithEmail))
+        } catch (error: any) {
+            return res.status(HttpStatusCode.InternalServerError).json(errorResponse(error.message))
+        }
+    }
 
-    @AuthGuard(AuthRole.USER)
-    @BlockGuard()
+    @httpPost("/old-email/confirm")
+    @AuthGuard(Role.USER)
+    @BlockGuard(Role.USER)
+    async checkOldEmail(@request() req: Request, @response() res: Response) {
+        try {
+            const newEmail = await this.userService.CheckEmail(req.user?.id as string, req.body.email);
+
+            await this.otpService.sendOneOTP(newEmail, OtpType.CHANGE_EMAIL, RoleType.USER)
+
+            return res.status(HttpStatusCode.Ok).json(successResponse(`OTP sent to ${newEmail}! Please check the inbox`))
+
+        } catch (error: any) {
+            return res.status(HttpStatusCode.InternalServerError).json(errorResponse(error.message))
+        }
+    }
+
+    @httpPost("/verify-email-otp")
+    @AuthGuard(Role.USER)
+    @BlockGuard(Role.USER)
+    async checkOldEmailOtp(@request() req: Request, @response() res: Response) {
+        try {
+            const { email, otp } = req.body;
+
+            const result = await this.otpService.verifyEmailOTP(email, otp, OtpType.CHANGE_EMAIL, RoleType.USER)
+
+            return res.status(HttpStatusCode.Ok).json(successResponse(`OTP verify successfully done`))
+        } catch (error: any) {
+            return res.status(HttpStatusCode.InternalServerError).json(error.message)
+        }
+    }
+
+    @httpPost("/new-email/confirm")
+    @AuthGuard(Role.USER)
+    @BlockGuard(Role.USER)
+    async confirmEmail(@request() req: Request, @response() res: Response) {
+        try {
+            const newEmail = await this.userService.updateEmailConfirm(req.body.email);
+
+            await this.otpService.sendOneOTP(newEmail, OtpType.CHANGE_EMAIL, RoleType.USER)
+            return res.status(HttpStatusCode.Found).json(successResponse(`OTP sent to ${newEmail}. Please check your inbox`))
+        } catch (error: any) {
+            return res.status(HttpStatusCode.InternalServerError).json(errorResponse(error.message))
+        }
+    }
+
+
+
+    @httpPost("/", validateRequest(CreateUserDTO))
+    @AuthGuard(Role.USER)
+    @BlockGuard(Role.USER)
     async createUser(@request() req: Request, @response() res: Response) {
         try {
             const user = await this.userService.createUser(req.body);
@@ -57,13 +130,12 @@ export class UserController {
         }
     }
 
-    @httpPut("/:id")
-    @BlockGuard()
-    @AuthGuard(AuthRole.USER)
+    @httpPut("/", validateRequest(UpdateUserDTO))
+    @AuthGuard(Role.USER)
+    @BlockGuard(Role.USER)
     async updateUser(@request() req: Request, @response() res: Response) {
         try {
-            const { id } = req.params;
-            const user = await this.userService.updateUser(id, req.body);
+            const user = await this.userService.updateUser(req.user?.id as string, req.body);
             if (!user) return res.status(404).json(errorResponse("User not found"));
             return res.json(successResponse(user, "User updated successfully"));
         } catch (error: any) {
@@ -72,101 +144,36 @@ export class UserController {
     }
 
 
-
-    @httpPost("/send-otp", validateRequest(SendOtpDto))
-    async sendOtp(@request() req: Request, @response() res: Response) {
+    @httpGet("/email/:email")
+    @AuthGuard(Role.ADMIN)
+    async getUserByEmail(req: Request, res: Response) {
         try {
-            const { email } = req.body;
-            await this.userService.sendOtp(email, "SIGNUP", "user");
-            return res.json(successResponse({}, "OTP sent successfully"));
+            const user = await this.userService.getUserByEmail(req.params.email);
+            return res.json(successResponse(user, "User retrieved successfully"));
         } catch (error: any) {
-            return res.status(500).json(errorResponse(error.message));
+            return res.status(400).json(errorResponse(error.message));
         }
     }
 
-    @httpPost("/resend-otp", validateRequest(SendOtpDto))
-    async resendOtp(@request() req: Request, @response() res: Response) {
+    @httpPatch("/unblock/:id")
+    @AuthGuard(Role.ADMIN)
+    async unblockUser(req: Request, res: Response) {
         try {
-            console.log(req.body)
-            const { email } = req.body;
-            await this.userService.sendOtp(email, "SIGNUP", "user");
-            return res.json(successResponse({}, "OTP resent successfully"));
+            const user = await this.userService.unblockUser(req.params.id);
+            return res.json(successResponse(user, "User unblocked successfully"));
         } catch (error: any) {
-            return res.status(500).json(errorResponse(error.message));
+            return res.status(400).json(errorResponse(error.message));
         }
     }
 
-    @httpPost("/verify-otp", validateRequest(VerifyOtpDto))
-    async verifyOtp(@request() req: Request, @response() res: Response) {
+    @httpPatch("/block/:id")
+    @AuthGuard(Role.ADMIN)
+    async blockUser(req: Request, res: Response) {
         try {
-            const { email, otp } = req.body;
-            console.log("lol")
-            const isValid = await this.userService.verifyOtp(email, otp, OtpType.SIGNUP, Role.user);
-            if (!isValid) return res.status(400).json(errorResponse("Invalid OTP"));
-            return res.json(successResponse({}, "OTP verified successfully"));
+            const user = await this.userService.blockUser(req.params.id);
+            return res.json(successResponse(user, "User blocked successfully"));
         } catch (error: any) {
-            return res.status(500).json(errorResponse(error.message));
-        }
-    }
-
-    @httpPost('/verify-email')
-    async verifyEmail(@request() req: Request, @response() res: Response) {
-        try {
-            const user = await this.userService.getUserByEmail(req.body.email)
-
-            const isDone = await this.userService.sendOtp(user?.email, OtpType.FORGOT, Role.user)
-            if (isDone) {
-                return res.status(200).json(successResponse(user?.email))
-            } else {
-                return res.status(400).json(errorResponse("Failed to send OTP"))
-            }
-        } catch (error: any) {
-            return res.status(500).json(errorResponse(error.message))
-        }
-    }
-
-    @httpPost('/forgot-password')
-    async forgotPassword(@request() req: Request, @response() res: Response) {
-        try {
-
-            const { password, email } = req.body;
-
-            const users = await this.userService.getUserByEmail(email)
-
-            if (!users) {
-                throw new Error("User not found! Please register")
-            }
-
-            await this.userService.updateUser(users._id, { password })
-
-            return res.status(200).json(successResponse("Password change successfully"))
-        } catch (error: any) {
-            return res.status(500).json(errorResponse(error.message))
-        }
-    }
-
-    @httpPost("/forgot-password-otp", validateRequest(ForgotPasswordDto))
-    async forgotPasswordOtp(@request() req: Request, @response() res: Response) {
-        try {
-            const { email } = req.body;
-            await this.userService.sendOtp(email, OtpType.FORGOT, Role.user);
-            return res.json(successResponse({}, "OTP sent for password reset"));
-        } catch (error: any) {
-            return res.status(500).json(errorResponse(error.message));
-        }
-    }
-
-    @httpPost("/forgot-password-verify", validateRequest(VerifyOtpDto))
-    async forgotPasswordVerify(@request() req: Request, @response() res: Response) {
-        try {
-            console.log("working the password section now")
-            const { email, otp } = req.body;
-            console.log(email, otp)
-            const isValid = await this.userService.verifyOtp(email, otp, OtpType.FORGOT, Role.user);
-            if (!isValid) return res.status(400).json(errorResponse("Invalid OTP found"));
-            return res.json(successResponse({}, "OTP verified successfully"));
-        } catch (error: any) {
-            return res.status(500).json(errorResponse(error.message));
+            return res.status(400).json(errorResponse(error.message));
         }
     }
 }
