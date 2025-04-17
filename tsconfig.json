@@ -1,48 +1,25 @@
 {
   "compilerOptions": {
-    "target": "es2016",
-    "module": "commonjs",
+    "target": "ESNext",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "esModuleInterop": true,
-    // "typeRoots": [
-    //   "./node_modules/@types",
-    //   "./src/types"
-    // ],
-    // "types": [
-    //   "node",
-    //   "express"
-    // ],
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "skipLibCheck": true,
-    /* Paths and Directories */
-    "baseUrl": "./src", /* Base directory for module resolution */
-    "rootDir": "./src", /* Root directory of TypeScript source files */
-    "outDir": "./dist", /* Output directory for compiled files */
-    /* Module Resolution */
+    "rootDir": "src",
+    "outDir": "dist",
+    "baseUrl": "src",
     "paths": {
-      "@/*": [
-        "*"
-      ] /* Alias @ to src folder */
+      "@/*": ["*"]
     },
-    /* Emit Settings */
-    "declaration": true, /* Generate .d.ts files for TypeScript definitions */
-    "sourceMap": true, /* Generate source maps for debugging */
-    "removeComments": true, /* Remove comments from compiled files */
-    "noEmitOnError": true, /* Prevent emitting files if there are errors */
-    /* Type Checking */
-    "strictNullChecks": true, /* Enable strict null checks */
-    "noImplicitAny": true, /* Disallow implicit `any` type */
-    "noUnusedLocals": false, /* Error for unused local variables */
-    "noUnusedParameters": false /* Error for unused parameters */
+    "sourceMap": true,
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo",
+    "noEmitOnError": false
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    ".env"
-  ]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", ".tsbuildinfo"]
 }
