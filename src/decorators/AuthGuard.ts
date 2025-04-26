@@ -20,9 +20,7 @@ export function AuthGuard(role: Role) {
             try {
                 const { token } = await getRoleToken(role, req)
 
-
                 if (!token) {
-                    console.log("auth guard: no token working", token)
                     return res.status(401).json(errorResponse("Unauthorized: No token provided", 401));
                 }
 
@@ -43,12 +41,9 @@ export function AuthGuard(role: Role) {
 
                     return await originalMethod.call(this, req, res, next);
                 } catch (jwtError: any) {
-                    console.log(req.url, req.baseUrl)
-                    console.log("role is: ", role)
                     return res.status(401).json(errorResponse("Invalid or expired token", 401));
                 }
             } catch (error: any) {
-                console.log("Guard error:", error);
                 return res.status(500).json(errorResponse("Server error in authentication", 500));
             }
         };
