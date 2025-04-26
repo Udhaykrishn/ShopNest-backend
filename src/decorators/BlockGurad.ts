@@ -23,7 +23,6 @@ export function BlockGuard(roles: Role) {
 
 
                 if (!token) {
-                    console.log("auth guard: no token working")
                     return res.status(401).json(errorResponse("Unauthorized: No token provided", 401));
                 }
 
