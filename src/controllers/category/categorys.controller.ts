@@ -35,17 +35,17 @@ export class CategorysController {
                 minPrice,
                 maxPrice,
                 sortBy = "createdAt",
-                search
+                search,
+                isBlocked
             } = req.query;
 
             const parsedLimit = limit ? Number(limit) : null;
             const parsedPage = Number(page)
-            const isBlocked = false;
 
             const categorys = await this.categoryService.getCategorys({
                 page: parsedPage,
                 limit: parsedLimit as number,
-                isBlocked,
+                isBlocked: isBlocked ? isBlocked : undefined as any,
                 minPrice: minPrice ? Number(minPrice) : undefined,
                 maxPrice: maxPrice ? Number(maxPrice) : undefined,
                 sortBy: String(sortBy),
