@@ -1,4 +1,5 @@
 import { inject } from "inversify";
+import { AuthRequest } from "./../../decorators/AuthGuard";
 import {
     controller,
     httpGet,
@@ -34,9 +35,10 @@ export class UserController {
     ) { }
 
     @httpGet("/")
+    @AuthGuard(Role.ADMIN)
     async getUsers(@request() req: Request, @response() res: Response) {
         try {
-            const { search, page = 1, limit = 10 } = req.query;
+            const { search, page, limit } = req.query;
             const result = await this.userService.getAllUsers(search as string, Number(page), Number(limit));
             return res.status(HttpStatusCode.Ok).json(successResponse(result, "Users retrieved successfully"));
         } catch (error: any) {
