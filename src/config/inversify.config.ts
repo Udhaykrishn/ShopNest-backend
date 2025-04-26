@@ -8,7 +8,8 @@ import {
     CartModule,
     AddressModule,
     OrderModule,
-    CheckoutModule
+    CheckoutModule,
+    WalletModule
 } from "@/modules";
 import { WishlistModule } from "@/modules/wishlist";
 import { Container } from "inversify";
@@ -29,5 +30,6 @@ container.load(
     WishlistModule,
     OrderModule,
     AddressModule,
-    CheckoutModule
+    CheckoutModule,
+    WalletModule
 );
