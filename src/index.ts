@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import app from "@/app";
-import { DatabaseService } from "@/config"
-const PORT = 3001;
+import { DatabaseService ,config} from "@/config"
+const PORT = config.PORT;
 
 const bootstrap = async () => {
   await DatabaseService.connection();
