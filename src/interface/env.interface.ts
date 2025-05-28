@@ -15,4 +15,6 @@ export interface IEnvConfig {
     CRYTPO_SECRET: string; 
     GEMINI_API: string
     SIGN_KEY: string;
+    RAZORPAY_KEY_ID:string;
+    RAZORPAY_SECRET:string;
 }
