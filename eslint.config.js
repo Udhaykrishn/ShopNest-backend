@@ -1,4 +1,3 @@
-// eslint.config.cjs
 const tseslint = require('typescript-eslint');
 
 module.exports = tseslint.config({
@@ -13,7 +12,7 @@ module.exports = tseslint.config({
     plugins: {
         '@typescript-eslint': tseslint.plugin,
     },
-    ignores: ['dist/**', 'node_modules/**'], // replaces .eslintignore
+    ignores: ['dist/**', 'node_modules/**'],
     rules: {
         '@typescript-eslint/no-unused-vars': ['warn'],
         '@typescript-eslint/explicit-function-return-type': 'off',
