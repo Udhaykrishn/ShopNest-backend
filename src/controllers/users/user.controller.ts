@@ -1,5 +1,4 @@
 import { inject } from "inversify";
-import { AuthRequest } from "./../../decorators/AuthGuard";
 import {
     controller,
     httpGet,
@@ -46,13 +45,12 @@ export class UserController {
         }
     }
 
-    @httpGet("/:id")
+    @httpGet("/")
     @AuthGuard(Role.USER)
     @BlockGuard(Role.USER)
     async getUserById(@request() req: Request, @response() res: Response) {
         try {
-            const { id } = req.params;
-            const user = await this.userService.getUserById(id);
+            const user = await this.userService.getUserById(req.user?.id as string);
             if (!user) return res.status(HttpStatusCode.NotFound).json(errorResponse("User not found"));
             return res.status(HttpStatusCode.Ok).json(successResponse(user, "User retrieved successfully"));
         } catch (error: any) {
