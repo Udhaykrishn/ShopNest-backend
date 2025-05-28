@@ -27,5 +27,7 @@ export const config: IEnvConfig = {
     CLOUDINARY_API_SECRET: getEnvVariable("CLOUDINARY_API_SECRET"),
     GOOGLE_CLIENT_ID: getEnvVariable("GOOGLE_CLIENT_ID"),
     CRYTPO_SECRET: getEnvVariable("CRYTPO_SECRET"),
-    SIGN_KEY: getEnvVariable("SIGN_KEY")
+    SIGN_KEY: getEnvVariable("SIGN_KEY"),
+    RAZORPAY_KEY_ID:getEnvVariable("RAZORPAY_KEY_ID"),
+    RAZORPAY_SECRET:getEnvVariable("RAZORPAY_SECRET")
 };
