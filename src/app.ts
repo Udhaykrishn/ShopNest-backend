@@ -14,7 +14,6 @@ const server = new InversifyExpressServer(container);
 
 server.setConfig((app) => {
     app.use(helmet());
-
     app.use(compression());
 
     app.use(cors({
