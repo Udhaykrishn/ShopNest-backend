@@ -7,7 +7,6 @@ import { controller, httpGet, httpPost, request, response } from "inversify-expr
 import { CreateVendorDTO, LoginVendorDTO } from "@/dtos/vendor/vendor.dto";
 import { IAuthVendorService } from "@/services/interface";
 import { IVendor } from "@/models/vendors/interface";
-import { Throttle } from "@/decorators/throttle.decorator";
 import { AuthGuard, AuthRequest } from "@/decorators/AuthGuard";
 import { BlockGuard } from "@/decorators/BlockGurad";
 import { OtpType, Role, RoleType } from "@/constants";
