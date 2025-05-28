@@ -9,8 +9,12 @@ import {
     AddressModule,
     OrderModule,
     CheckoutModule,
-    WalletModule
+    WalletModule,
+    PaymentModule,
+    CouponModule,
+    OfferModule
 } from "@/modules";
+import { SalesModules } from "@/modules/sales";
 import { WishlistModule } from "@/modules/wishlist";
 import { Container } from "inversify";
 export const container = new Container({
@@ -31,5 +35,9 @@ container.load(
     OrderModule,
     AddressModule,
     CheckoutModule,
-    WalletModule
+    WalletModule,
+    PaymentModule,
+    CouponModule,
+    OfferModule,
+    SalesModules
 );
