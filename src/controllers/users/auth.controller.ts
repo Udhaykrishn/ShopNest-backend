@@ -1,6 +1,6 @@
 import { CreateUserDTO, ForgotPasswordDto, LoginUserDto, SendOtpDto, VerifyOtpDto } from "@/dtos/users";
 import { validateRequest } from "@/middleware/validation.middleware";
-import { clearAuthCookie, errorResponse, setAuthHeader, successResponse } from "@/utils";
+import { errorResponse, setAuthHeader, successResponse } from "@/utils";
 import { inject } from "inversify";
 import { Request, Response } from "express";
 import { controller, httpPost, response, request, httpGet } from "inversify-express-utils";
