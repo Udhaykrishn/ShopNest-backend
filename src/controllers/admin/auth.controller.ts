@@ -59,7 +59,7 @@ export class AdminAuthController {
     @AuthGuard(Role.ADMIN)
     async logout(@request() req: AuthRequest, @response() res: Response) {
         try {
-            clearAuthCookie(res, "admin_auth_token")
+            clearAuthCookie(res,"admin_auth_token")
             return res.status(HttpStatusCode.Ok).json(successResponse("Admin logout successfully"))
         } catch (error: any) {
             return res.status(HttpStatusCode.InternalServerError).json(errorResponse(error.message))
