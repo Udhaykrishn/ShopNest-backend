@@ -1,21 +1,12 @@
 import { IUser } from "@/interface/users.interface"
+import { JwtPayload } from "@/utils";
 
 declare global {
     namespace Express {
         interface Request {
-            user?: {
-                id: string;
-                role: string,
-                iat: number,
-                exp: number,
-            },
+            user?: JwtPayload,
 
-            vendor?: {
-                id: string;
-                role: string;
-                iat: number;
-                exp: number;
-            }
+            vendor?: JwtPayload
         }
     }
 }
