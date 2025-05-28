@@ -28,7 +28,7 @@ export class AddressController {
     async createAddress(@request() req: Request, @response() res: Response) {
         try {
             const address = await this.addressService.addAddress(this.getAddressParams(req, false), req.body)
-
+            
             return res.status(HttpStatusCode.Created).json(successResponse(address))
         } catch (error: any) {
             return res.status(HttpStatusCode.InternalServerError).json(errorResponse(error.message))
@@ -40,7 +40,6 @@ export class AddressController {
     @BlockGuard(Role.USER)
     async setDefault(@request() req: Request, @response() res: Response) {
         try {
-            console.log("working this section")
             const setDefaultAddress = await this.addressService.setDefaultAddress(this.getAddressParams(req))
             return res.status(HttpStatusCode.Ok).json(successResponse(setDefaultAddress))
         } catch (error: any) {
@@ -53,7 +52,6 @@ export class AddressController {
     @BlockGuard(Role.USER)
     async updateAddress(@request() req: Request, @response() res: Response) {
         try {
-            console.log(req.body)
             const updatedAddress = await this.addressService.updateAddress(this.getAddressParams(req), req.body)
 
             return res.status(HttpStatusCode.Created).json(successResponse(updatedAddress))
