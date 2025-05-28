@@ -6,6 +6,9 @@ build({
     bundle: true,
     platform: 'node',
     format: 'cjs',
+    sourcemap: false,
+    minify: true,
+    target: ["node18"],
     outdir: 'dist/index.cjs',
     plugins: [
         aliasPath({
