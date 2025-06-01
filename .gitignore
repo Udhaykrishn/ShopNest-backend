@@ -27,3 +27,4 @@ dist-ssr
 dependency-graph.dot
 .dependency-cruiser.js
 measure.js
+benchmark.ts
