@@ -30,3 +30,4 @@ dependency-graph.svg
 measure.js
 benchmark.ts
 benchmark.json
+.env.production
