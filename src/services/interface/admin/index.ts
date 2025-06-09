@@ -1,0 +1,1 @@
+export { IAdminAuthService } from "./IAuth-admin.service"

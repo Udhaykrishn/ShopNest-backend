@@ -1,0 +1,11 @@
+export { IOrderService } from './orders/orders.service';
+export { IAdminAuthService } from "./admin"
+export { IVendorService, IAuthVendorService } from "./vendor"
+export { IAuthService, IUserService } from "./user"
+export { IProductsService } from "./products"
+export { IEmailService } from "./email/IEmail.service"
+export { IPhoneService } from "./IPhone.service"
+export { IOtpService } from "./otp/IOtp.service"
+export { ICategoryService } from "./category/ICategory.service"
+export { ICartService } from "./cart/ICart.service"
+export { IWishlistService } from "./wishlist"
