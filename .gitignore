@@ -26,6 +26,7 @@ dist-ssr
 *.dot
 dependency-graph.dot
 .dependency-cruiser.js
+dependency-graph.svg
 measure.js
 benchmark.ts
 benchmark.json
