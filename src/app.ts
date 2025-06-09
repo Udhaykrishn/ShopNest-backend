@@ -18,7 +18,7 @@ server.setConfig((app) => {
 
     app.use(cors({
         credentials: true,
-        origin: config.FRONT_URL,
+        origin: [config.FRONT_URL],
         methods: ["GET", "POST", "PUT","PATCH", "DELETE"],
         allowedHeaders: ["Content-Type", "Authorization"]
     }));
