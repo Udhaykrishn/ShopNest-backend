@@ -1,6 +1,7 @@
 import { COOKIE_NAME, Role } from "@/constants";
 import { Response, Request } from "express";
 import { getRoleToken } from "./role-check.util";
+import { config } from "@/config";
 
 interface CookieOptions {
     httpOnly: boolean;
@@ -14,10 +15,10 @@ export async function setAuthHeader(token: string, req: Request, res: Response, 
     return new Promise(async (resolve) => {
         const cookieOptions: CookieOptions = {
             httpOnly: true,
-            secure: !isDevelopment,
-            sameSite: 'strict',
+            secure: true,
+            sameSite: 'none',
+            domain: "shopnest.zapto.org"
         }
-
 
         const { cookie_name } = await getRoleToken(role, req)
 
@@ -26,7 +27,6 @@ export async function setAuthHeader(token: string, req: Request, res: Response, 
         }
 
         res.cookie(cookie_name, token, cookieOptions)
-        console.log("set-cookie header: ", res.getHeader("Set-Cookie"))
 
         res.setHeader("Authorization", `Bearer ${token}`)
         resolve()
@@ -38,16 +38,14 @@ export async function clearAuthCookie(
     cookie_name: string,
     isDevelopment: boolean = process.env.NODE_ENV === 'development'
 ): Promise<void> {
-    return new Promise((resolve) => {   
+    return new Promise((resolve) => {
         const cookieOptions: Partial<CookieOptions> = {
             httpOnly: true,
-            secure: !isDevelopment,
-            sameSite: 'strict',
+            secure: true,
+            sameSite: 'none',
+            domain: "shopnest.zapto.org"
         };
 
-        if (!isDevelopment && process.env.COOKIE_DOMAIN) {
-            cookieOptions.domain = process.env.COOKIE_DOMAIN;
-        }
         res.clearCookie(cookie_name, cookieOptions);
         res.removeHeader("Authorization");
         resolve();
