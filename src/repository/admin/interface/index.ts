@@ -1,0 +1,1 @@
+export { IAdminAuthRepository } from "./auth-admin.interface"

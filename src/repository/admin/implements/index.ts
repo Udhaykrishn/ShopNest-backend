@@ -1,0 +1,1 @@
+export { AdminAuthRepository } from "./auth.repository"
