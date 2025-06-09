@@ -18,7 +18,8 @@
     "sourceMap": true,
     "incremental": true,
     "tsBuildInfoFile": ".tsbuildinfo",
-    "noEmitOnError": false
+    "noEmitOnError": false,
+    "typeRoots": ["./node_modules/@types", "./src/@types"]
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist", ".tsbuildinfo"]

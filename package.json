@@ -7,10 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node build.mjs",
     "dev": "nodemon",
-    "start": "node dist/index.cjs",
+    "start": "node --enable-source-maps dist/index.js",
     "pm2:dev": "pm2 start ./pm2.config.js",
     "lint": "eslint ./src",
-    "lint:fix": "eslint ./src --fix"
+    "lint:fix": "eslint ./src --fix",
+    "benchmark": "nodemon --config benchmark.json"
   },
   "keywords": [],
   "author": "",
@@ -49,6 +50,7 @@
     "pdfkit-table": "^0.1.99",
     "razorpay": "^2.9.6",
     "reflect-metadata": "^0.2.2",
+    "source-map-support": "^0.5.21",
     "tsconfig-paths": "^4.2.0",
     "uuid": "^11.1.0"
   },

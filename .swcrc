@@ -13,8 +13,8 @@
     },
     "module": {
         "type": "commonjs",
-        "strict": false,
+        "strict": true,
         "lazy": true
     },
-    "minify": false
+    "minify": true
 }
