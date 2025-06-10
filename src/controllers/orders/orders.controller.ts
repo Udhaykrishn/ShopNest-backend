@@ -58,6 +58,7 @@ export class OrderController {
             res.setHeader('Content-Disposition', `attachment; filename=invoice-${orderId}.pdf`);
             await this.invocieService.getTemplate(req.user?.id as string, orderId, res)
         } catch (error: any) {
+            console.error('Error generating invoice:', error);
             return res.status(HttpStatus.InternalServerError).json(errorResponse(error.message));
         }
     }
