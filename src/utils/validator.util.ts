@@ -4,7 +4,13 @@ import { validate } from "deep-email-validator"
 
 export async function validateEmail(email: string): Promise<boolean> {
     try {
-        const { valid } = await validate(email)
+        const { valid } = await validate({
+            email: email,
+            validateRegex: true,
+            validateMx: true,
+            validateTypo: true,
+            validateSMTP: false
+        })
         return valid
     } catch (error: any) {
         return false;
