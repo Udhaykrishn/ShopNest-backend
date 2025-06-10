@@ -11,7 +11,7 @@ export class InvoiceService implements IInvoiceService {
         @inject(ORDER.OrderService) private readonly orderService: IOrderService
     ) { }
 
-    async getTemplate(userId: string, orderId: string, res: any): Promise<void> {
+    async getTemplate(userId: string, orderId: string, res: NodeJS.WritableStream): Promise<void> {
         try {
             if (!userId) {
                 throw new Error("User not authenticated");
