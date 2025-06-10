@@ -1,7 +1,7 @@
 node_modules
 npm-debug.log
 yarn-error.log
-
+!node_modules/pdfkit/js/data/Helvetica*.afm
 dist
 
 .env.local
